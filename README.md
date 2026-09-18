@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Production Control Dashboard
 
-## Getting Started
+A small factory operations dashboard for tracking production jobs, built as a front-end assignment.
 
-First, run the development server:
+## Stack
 
-```bash
+- Next.js (App Router)
+- React
+- TypeScript
+- Tailwind CSS
+- shadcn/ui
+- lucide-react
+
+## Setup
+
+\`\`\`bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+\`\`\`
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Component structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `app/page.tsx` — owns all state (jobs, selected job, search/filter/sort values) and composes the page
+- `components/summary-cards.tsx` — top metrics (total, delayed, due soon, completed), computed from the full job list
+- `components/job-filters.tsx` — search input, status filter, sort dropdown (controlled, state lives in the parent)
+- `components/jobs-table.tsx` — renders the filtered/sorted job list, handles the empty state
+- `components/job-detail-panel.tsx` — side sheet with job details and a status-update dropdown
+- `lib/types.ts` — Job and JobStatus types
+- `lib/mock-data.ts` — mock job dataset
 
-## Learn More
+State is kept simple on purpose — everything lives in `useState` in `page.tsx` and gets passed down as props. Didn't reach for Context or a state library since the data flow is shallow (one page, four components).
 
-To learn more about Next.js, take a look at the following resources:
+## Assumptions
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Mock data dates are set relative to the current date so the "Due Soon" metric actually shows something meaningful in a demo, rather than mock dates that happen to be in the past.
+- "Due Soon" = due within 3 days and not already completed.
+- Status updates are local-only (in-memory state) — there's no backend, so changes reset on refresh. In a real version this would be a PATCH request to a jobs API.
+- Notes are read-only in the detail panel for now — the assignment asked for a status update action specifically, so I prioritized that over building out a full notes editor.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

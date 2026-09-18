@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { SummaryCards } from "@/components/ui/summary-cards";
+import { SummaryCards } from "@/components/summary-cards";
 import { JobsTable } from "@/components/jobs-table";
 import { JobDetailPanel } from "@/components/job-detail-panel";
 import { JobFilters, SortOption } from "@/components/job-filters";
